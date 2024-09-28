@@ -41,11 +41,8 @@ func (c *Client) SetHTTPClient(cl *http.Client) {
 	c.httpClient = cl
 }
 
-func (c *Client) SetEnv(env string) {
-	c.env = env
-}
-
 func (c *Client) GetVar(name string) (Var, error) {
+
 	var v Var
 
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/getvar", c.baseUrl), nil)
@@ -67,12 +64,11 @@ func (c *Client) GetVar(name string) (Var, error) {
 	return v, err
 }
 
-func (c *Client) GetAllVars(name string) (Var, error) {
-	var v Var
+func (c *Client) GetAllVars(name string) ([]Var, error) {
+	var v []Var
 
-	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/getvar", c.baseUrl), nil)
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/getallvars", c.baseUrl), nil)
 	req.Header.Set(XEnvHeader, c.env)
-	req.Header.Set(XVarHeader, name)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
