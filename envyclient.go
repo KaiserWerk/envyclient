@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -64,7 +65,7 @@ func (c *Client) GetVar(name string) (Var, error) {
 	return v, err
 }
 
-func (c *Client) GetAllVars(name string) ([]Var, error) {
+func (c *Client) GetAllVars() ([]Var, error) {
 	var v []Var
 
 	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/getallvars", c.baseUrl), nil)
@@ -101,4 +102,10 @@ func (c *Client) SetVar(name string, value string) error {
 		return nil
 	}
 	return fmt.Errorf("expected status code to be 200, got %d", resp.StatusCode)
+}
+
+func SetEnvVars(vars ...Var) {
+	for _, v := range vars {
+		os.Setenv(v.Name, v.Value)
+	}
 }
