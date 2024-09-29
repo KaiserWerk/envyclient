@@ -84,3 +84,21 @@ func (c *Client) GetAllVars(name string) ([]Var, error) {
 	err = json.Unmarshal(body, &v)
 	return v, err
 }
+
+func (c *Client) SetVar(name string, value string) error {
+	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/setvar", c.baseUrl), nil)
+	req.Header.Set(XEnvHeader, c.env)
+	req.Header.Set(XVarHeader, name)
+	req.Header.Set(XVarValueHeader, value)
+
+	resp, err := c.httpClient.Do(req)
+	_ = resp.Body.Close()
+	if err != nil {
+		return err
+	}
+
+	if resp.StatusCode == http.StatusOK {
+		return nil
+	}
+	return fmt.Errorf("expected status code to be 200, got %d", resp.StatusCode)
+}
