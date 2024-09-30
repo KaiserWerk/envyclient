@@ -4,9 +4,10 @@ A simple client to comfortably set and get variables from a remote [envy](https:
 
 ### API
 
-Create a new client with a base address, an environment name and the auth key (bearer token).
+Create a new client with a base address (without trailing slash), an environment name and the auth key (bearer token).
 
 ```golang
+// no trailing slash
 client := envyclient.NewClient("https://somehost:7000", "app-name", "default")
 ```
 
@@ -35,6 +36,7 @@ _, err := client.GetAllVars()  // returns []Var, error
 ### Example
 
 ```golang
+// no trailing slash
 client := envyclient.NewClient("http://domain.com:3030", "my_app", "default")
 _ = client.SetVar("API_KEY", "w49t861w6t")
 _ = client.SetVar("baseUrl", "http://cloud.host.org:8080")
