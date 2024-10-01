@@ -4,14 +4,15 @@ A simple client to comfortably set and get variables from a remote [envy](https:
 
 ### API
 
-Create a new client with a base address (without trailing slash), an environment name and the auth key (bearer token).
+Create a new client with a base address (without trailing slash), a scope name and the auth key (bearer token).
 
 ```golang
 // no trailing slash
-client := envyclient.NewClient("https://somehost:7000", "app-name", "default")
+client := envyclient.NewClient("https://somehost:7000", "myScope", "default")
 ```
 
-Set a variable in the environment. Only strings allowed.
+Permanently set a variable in the scope. Only strings are allowed.
+An existing variable is overwritten.
 
 ```golang
 name := "varname"
@@ -19,7 +20,16 @@ value := "some data"
 err := client.SetVar(name, value)
 ```
 
-Get a variable from the environment. It is automatically set as an environment variable and also returned.
+For the purpose of returning variables, they implemented as a `Var`:
+
+```golang
+type Var struct {
+    Name string
+    Value string
+}
+```
+
+Get a variable from the scope. It is automatically set as an environment variable and also returned.
 
 ```golang
 name := "varname"
@@ -27,7 +37,7 @@ _, err := client.GetVar(name) // returns Var, error
 ```
 
 
-Get all variables from the environment. They are automatically set as environment variables and also returned.
+Get all variables from the scope. They are automatically set as environment variables and also returned.
 
 ```golang
 _, err := client.GetAllVars()  // returns []Var, error
